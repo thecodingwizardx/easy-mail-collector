@@ -3,7 +3,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import type { ViteDevServer, Connect } from 'vite';
+import type { ViteDevServer } from 'vite';
+import type { IncomingMessage, ServerResponse } from 'http';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -38,7 +39,7 @@ export default defineConfig(({ mode }) => ({
     {
       name: 'mock-api',
       configureServer(server: ViteDevServer) {
-        server.middlewares.use((req: Connect.IncomingMessage, res: Connect.ServerResponse, next: Connect.NextFunction) => {
+        server.middlewares.use((req: IncomingMessage, res: ServerResponse, next) => {
           if (req.url === '/submit-contact' && req.method === 'POST') {
             // Read the request body
             let body = '';
