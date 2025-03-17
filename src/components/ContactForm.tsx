@@ -40,7 +40,14 @@ const ContactForm: FC = () => {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/submit-contact', {
+      // In development, use the /dev-api endpoint, in production use the real endpoint
+      const endpoint = import.meta.env.DEV 
+        ? '/dev-api/submit-contact' 
+        : '/api/submit-contact';
+      
+      console.log(`Submitting to endpoint: ${endpoint}`);
+      
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +56,7 @@ const ContactForm: FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit form');
+        throw new Error(`Failed to submit form: ${response.status} ${response.statusText}`);
       }
 
       toast({

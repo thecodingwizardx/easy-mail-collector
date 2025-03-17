@@ -1,6 +1,15 @@
 
-// This file would be used in a backend environment like Supabase Edge Functions
-// The actual implementation will depend on your hosting environment
+// This file describes how to implement the contact form submission API
+
+/**
+ * DEVELOPMENT USAGE:
+ * During development, form submissions are handled by the Vite dev server
+ * using the mock API middleware configured in vite.config.ts
+ * 
+ * PRODUCTION IMPLEMENTATION:
+ * For production, you'll need to implement this API endpoint in your backend.
+ * Below is an example implementation for reference.
+ */
 
 // PostgreSQL connection would be handled here
 // Example with PostgreSQL client (node-postgres)
@@ -8,7 +17,7 @@
 // import nodemailer from 'nodemailer';
 
 /*
-Required environment variables:
+Required environment variables (save these in a .env file):
 - POSTGRES_HOST
 - POSTGRES_PORT
 - POSTGRES_USER
@@ -75,5 +84,5 @@ export default async function handler(req, res) {
 */
 
 // This is a placeholder file. The actual implementation would be in 
-// a Supabase Edge Function or similar backend environment.
+// a Supabase Edge Function, Express API, Next.js API route, or similar backend environment.
 export {};

@@ -1,69 +1,55 @@
-# Welcome to your Lovable project
 
-## Project info
+# Contact Form Application
 
-**URL**: https://lovable.dev/projects/aa2af5a1-e27e-476d-b5e5-b6dab1b7f229
+This is a contact form application that allows users to submit contact information, which is stored in a PostgreSQL database and sends email notifications.
 
-## How can I edit this code?
+## Development Setup
 
-There are several ways of editing your application.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Run the development server: `npm run dev`
 
-**Use Lovable**
+During development, form submissions are handled by a mock API endpoint that logs data to the console.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/aa2af5a1-e27e-476d-b5e5-b6dab1b7f229) and start prompting.
+## Production Setup
 
-Changes made via Lovable will be committed automatically to this repo.
+For production deployment, you'll need to:
 
-**Use your preferred IDE**
+1. Set up a PostgreSQL database
+2. Create the required database tables using the SQL in `src/db/schema.sql`
+3. Implement the API endpoint described in `src/api/submit-contact.ts`
+4. Configure environment variables (see below)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Environment Variables
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Create a `.env` file with the following variables:
 
-Follow these steps:
+```
+# PostgreSQL Configuration
+POSTGRES_HOST=your-db-host
+POSTGRES_PORT=5432
+POSTGRES_USER=your-db-user
+POSTGRES_PASSWORD=your-db-password
+POSTGRES_DB=your-db-name
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+# Email Configuration
+EMAIL_USER=your-gmail-account@gmail.com
+EMAIL_PASSWORD=your-app-password
+EMAIL_TO=recipient@example.com
 ```
 
-**Edit a file directly in GitHub**
+Note for Gmail: You'll need to use an "App Password" rather than your regular Gmail password. You can generate one at https://myaccount.google.com/apppasswords (requires 2FA to be enabled on your Google account).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Database Schema
 
-**Use GitHub Codespaces**
+The application uses a single table for storing contact submissions. The schema is available in `src/db/schema.sql`.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Deployment Options
 
-## What technologies are used for this project?
+You can deploy the API endpoint using:
+1. Supabase Edge Functions
+2. Express.js on a Node.js server
+3. Serverless Functions (AWS Lambda, Vercel Functions, etc.)
+4. Next.js API Routes (if migrating to Next.js)
 
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/aa2af5a1-e27e-476d-b5e5-b6dab1b7f229) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+Choose the option that best fits your infrastructure requirements.
