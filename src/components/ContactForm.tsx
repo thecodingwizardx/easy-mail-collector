@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -55,13 +56,15 @@ const ContactForm: FC = () => {
         body: JSON.stringify(data),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error(`Failed to submit form: ${response.status} ${response.statusText}`);
+        throw new Error(result.message || `Failed to submit form: ${response.status} ${response.statusText}`);
       }
 
       toast({
         title: "Success!",
-        description: "Your message has been sent successfully.",
+        description: result.message || "Your message has been sent successfully.",
         variant: "default",
       });
       
@@ -70,7 +73,7 @@ const ContactForm: FC = () => {
       console.error('Error submitting form:', error);
       toast({
         title: "Error",
-        description: "Failed to send your message. Please try again later.",
+        description: error instanceof Error ? error.message : "Failed to send your message. Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -135,7 +138,12 @@ const ContactForm: FC = () => {
             className="w-full bg-brand-blue hover:bg-brand-darkBlue transition-colors"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Sending...' : 'Send Message'}
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Sending...
+              </>
+            ) : 'Send Message'}
           </Button>
         </form>
       </Form>

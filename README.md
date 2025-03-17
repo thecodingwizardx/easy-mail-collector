@@ -17,8 +17,9 @@ For production deployment, you'll need to:
 
 1. Set up a PostgreSQL database
 2. Create the required database tables using the SQL in `src/db/schema.sql`
-3. Implement the API endpoint described in `src/api/submit-contact.ts`
+3. Install required production dependencies: `npm install pg nodemailer`
 4. Configure environment variables (see below)
+5. Choose a deployment method for the API endpoint (see Deployment Options below)
 
 ## Environment Variables
 
@@ -47,9 +48,57 @@ The application uses a single table for storing contact submissions. The schema 
 ## Deployment Options
 
 You can deploy the API endpoint using:
-1. Supabase Edge Functions
-2. Express.js on a Node.js server
-3. Serverless Functions (AWS Lambda, Vercel Functions, etc.)
-4. Next.js API Routes (if migrating to Next.js)
+
+1. Express.js on a Node.js server:
+   ```javascript
+   import express from 'express';
+   import { handleContactSubmission } from './src/api/submit-contact';
+
+   const app = express();
+   app.use(express.json());
+   app.post('/api/submit-contact', handleContactSubmission);
+   app.listen(3000, () => console.log('Server running on port 3000'));
+   ```
+
+2. Supabase Edge Functions:
+   ```typescript
+   // submit-contact.ts edge function
+   import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+   import { handleContactSubmission } from '../src/api/submit-contact.ts';
+
+   serve(async (req) => {
+     const body = await req.json();
+     const response = { body: {}, status: 200 };
+     
+     await handleContactSubmission(
+       { method: req.method, body },
+       { 
+         status: (code) => { response.status = code; return response; },
+         json: (data) => { response.body = data; return response; }
+       }
+     );
+     
+     return new Response(JSON.stringify(response.body), {
+       status: response.status,
+       headers: { 'Content-Type': 'application/json' }
+     });
+   });
+   ```
+
+3. Next.js API Routes:
+   ```typescript
+   // pages/api/submit-contact.ts
+   import { handleContactSubmission } from '../../src/api/submit-contact';
+
+   export default handleContactSubmission;
+   ```
 
 Choose the option that best fits your infrastructure requirements.
+
+## Required Dependencies
+
+For production, make sure to install:
+```
+npm install pg nodemailer
+npm install -D @types/pg @types/nodemailer
+```
